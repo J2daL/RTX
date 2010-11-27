@@ -10,6 +10,7 @@
 #include <string.h>
 #include <setjmp.h>
 
+
 typedef struct Envelope{
 	struct Envelope *kernelpt; //used for creating the list of envelopes
 	struct Envelope *Next; // used to put the queue in different lists
@@ -27,7 +28,7 @@ typedef struct Envelope{
 	 * CRT_ack=6
 	 */
 
-	char *Data [256]; //pointer to an array of characters
+	char *Data [512]; //pointer to an array of characters
 }Envelope;
 
 typedef struct QueueEnv{
@@ -71,6 +72,8 @@ QueuePCB *Blocked_On_Resources [4]; //lack of recieved messages
 QueuePCB *Blocked_On_Envelope [4]; //(free envleopes)pointer that points to the head of the blocked on Envelope queue
 QueuePCB *Blocked_On_interupt [4]; //pointer that points to the head of the blocked on interrupt queue
 
+QueueEnv* Timeout_List;
+
 QueueEnv *Free_Env_Queue; //pointing to the head and tail of the envelopes in the free envleope queue
 QueuePCB* PCBList; //used to make the list of the processes, this pointer points to the first process in the list
 
@@ -94,7 +97,18 @@ NewPCB *current_process; //pointer that points to the PCB of the currently execu
 
 NewPCB* Executing;//pointer that points to the pcb of the currently executing process
 
+typedef struct input_buffer{
+	char buffer[512];
+	int Length;
+}input_buffer;
 
+typedef struct output_buffer{
+	char buffer[512];
+	int Length;
+}output_buffer;
+
+output_buffer* o_buffer;
+input_buffer* i_buffer;
 
 
 
